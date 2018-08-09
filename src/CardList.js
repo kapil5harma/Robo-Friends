@@ -3,7 +3,6 @@ import Card from './Card';
 
 const CardList = ({ robots }) => {
   const cardComponent = robots.map((robot, i) => {
-    console.log('robot: ', robot);
     return (
       <Card
         key={robot.id}
