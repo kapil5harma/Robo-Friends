@@ -6,8 +6,14 @@ import './App.css';
 
 class App extends Component {
   state = {
-    robots: robots,
+    robots: [],
     searchField: ''
+  };
+
+  componentDidMount = () => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(res => res.json())
+      .then(users => this.setState({ robots: users }));
   };
 
   onSearchChange = event => {
@@ -22,14 +28,20 @@ class App extends Component {
         .toLowerCase()
         .includes(this.state.searchField.toLowerCase());
     });
+
     // console.log('filteredRobots: ', filteredRobots);
-    return (
-      <div className="tc">
-        <h1 className="f1">RoboFriends</h1>
-        <SearchBox searchChange={this.onSearchChange} />
-        <CardList robots={filteredRobots} />
-      </div>
-    );
+    // let filteredRobots = null;
+    if (this.state.robots.length === 0) {
+      return <h1 className="tc">Loading...</h1>;
+    } else {
+      return (
+        <div className="tc">
+          <h1 className="f1">RoboFriends</h1>
+          <SearchBox searchChange={this.onSearchChange} />
+          <CardList robots={filteredRobots} />
+        </div>
+      );
+    }
   }
 }
 
