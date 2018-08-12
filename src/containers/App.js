@@ -4,29 +4,21 @@ import './App.css';
 import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import CardList from '../components/CardList';
-import { setSearchField } from '../actions';
+import { setSearchField, requestRobots } from '../actions';
 
 class App extends Component {
-  state = {
-    robots: []
-  };
-
   componentDidMount = () => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(res => res.json())
-      .then(users => this.setState({ robots: users }));
+    this.props.onRequestRobots();
   };
 
   render() {
-    const { robots } = this.state;
-    const { searchField, onSearchChange } = this.props;
+    const { searchField, onSearchChange, robots, loading } = this.props;
+
     const filteredRobots = robots.filter(robot => {
       return robot.name.toLowerCase().includes(searchField.toLowerCase());
     });
 
-    // console.log('filteredRobots: ', filteredRobots);
-    // let filteredRobots = null;
-    if (!robots.length) {
+    if (loading) {
       return <h1 className="tc">Loading...</h1>;
     } else {
       return (
@@ -44,13 +36,17 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    searchField: state.searchField
+    searchField: state.searchRobots.searchField,
+    robots: state.requestRobots.robots,
+    loading: state.requestRobots.loading,
+    error: state.requestRobots.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSearchChange: event => dispatch(setSearchField(event.target.value))
+    onSearchChange: event => dispatch(setSearchField(event.target.value)),
+    onRequestRobots: () => dispatch(requestRobots())
   };
 };
 
