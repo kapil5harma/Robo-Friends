@@ -5,6 +5,7 @@ import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import CardList from '../components/CardList';
 import { setSearchField, requestRobots } from '../actions';
+import ErrorBoundary from '../containers/ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   componentDidMount = () => {
@@ -26,7 +27,9 @@ class App extends Component {
           <h1 className="f1">RoboFriends</h1>
           <SearchBox searchChange={onSearchChange} />
           <Scroll>
-            <CardList robots={filteredRobots} />
+            <ErrorBoundary>
+              <CardList robots={filteredRobots} />
+            </ErrorBoundary>
           </Scroll>
         </div>
       );
